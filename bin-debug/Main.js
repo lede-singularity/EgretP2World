@@ -1,31 +1,3 @@
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
@@ -71,6 +43,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+/*
+*/
 var Main = (function (_super) {
     __extends(Main, _super);
     function Main() {
@@ -156,7 +130,6 @@ var Main = (function (_super) {
      * Create scene interface
      */
     Main.prototype.createGameScene = function () {
-        var _this = this;
         var intervalID = setInterval(onTick, 30);
         function onTick(dt) {
             world.step(30 / 1000);
@@ -194,6 +167,7 @@ var Main = (function (_super) {
         function onTouch(e) {
             var positionX = Math.floor(e.stageX / factor);
             var positionY = Math.floor((e.stageY) / factor);
+            console.log("onTouch", positionX, positionY);
             addOneBox(positionX, positionY);
         }
         var self = this;
@@ -210,13 +184,13 @@ var Main = (function (_super) {
             }
             else {
                 //添加圆形刚体
-                var boxShape = new p2.Circle({ radius: 1 });
+                var circleShape = new p2.Circle({ radius: 1 });
                 var boxBody = new p2.Body({ mass: 1, position: [positionX, positionY] });
-                boxBody.addShape(boxShape);
+                boxBody.addShape(circleShape);
                 world.addBody(boxBody);
                 var display = self.createBitmapByName("circle_png");
-                display.width = boxShape.radius * 2 * factor;
-                display.height = boxShape.radius * 2 * factor;
+                display.width = circleShape.radius * 2 * factor;
+                display.height = circleShape.radius * 2 * factor;
             }
             if (!self._isDebug) {
                 display.anchorOffsetX = display.width / 2;
@@ -228,19 +202,6 @@ var Main = (function (_super) {
         for (var i = 0; i < 8; i++) {
             addOneBox(2 * i + 2, 2 * i + 5);
         }
-        var bitmapFont = RES.getRes("font_fnt");
-        var bitmapText = new egret.BitmapText();
-        bitmapText.text = "Click!";
-        bitmapText.font = bitmapFont;
-        bitmapText.anchorOffsetX = bitmapText.width / 2;
-        bitmapText.anchorOffsetY = bitmapText.height / 2;
-        bitmapText.x = this.stage.stageWidth / 2;
-        bitmapText.y = this.stage.stageHeight / 2;
-        this.addChild(bitmapText);
-        bitmapText.touchEnabled = true;
-        bitmapText.addEventListener(egret.TouchEvent.TOUCH_TAP, function (event) {
-            _this.removeChild(bitmapText);
-        }, this);
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
