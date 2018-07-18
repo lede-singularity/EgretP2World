@@ -157,16 +157,18 @@ var Main = (function (_super) {
         //创建world
         var world = new p2.World();
         world.sleepMode = p2.World.BODY_SLEEPING;
+        console.info("this.stage.$stageHeight", this.stage.$stageHeight);
+        console.info("this.stage.$stageWidth", this.stage.$stageWidth);
         //创建plane
         var planeShape = new p2.Plane();
-        var planeBody = new p2.Body({ position: [0, -15] });
+        var planeBody = new p2.Body({ position: [0, -(this.stage.$stageHeight - 100) / 50] });
         planeBody.addShape(planeShape);
         planeBody.displays = [];
         world.addBody(planeBody);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, onTouch, this);
         function onTouch(e) {
             var positionX = Math.floor(e.stageX / factor);
-            var positionY = Math.floor((e.stageY) / factor);
+            var positionY = -Math.floor((e.stageY) / factor);
             console.log("onTouch", positionX, positionY);
             addOneBox(positionX, positionY);
         }
@@ -181,6 +183,10 @@ var Main = (function (_super) {
                 var display = self.createBitmapByName("rect_png");
                 display.width = boxShape.width * factor;
                 display.height = boxShape.height * factor;
+                display.anchorOffsetX = display.width / 2;
+                display.anchorOffsetY = display.height / 2;
+                boxBody.displays = [display];
+                self.addChild(display);
             }
             else {
                 //添加圆形刚体
@@ -191,8 +197,6 @@ var Main = (function (_super) {
                 var display = self.createBitmapByName("circle_png");
                 display.width = circleShape.radius * 2 * factor;
                 display.height = circleShape.radius * 2 * factor;
-            }
-            if (!self._isDebug) {
                 display.anchorOffsetX = display.width / 2;
                 display.anchorOffsetY = display.height / 2;
                 boxBody.displays = [display];
@@ -202,6 +206,13 @@ var Main = (function (_super) {
         for (var i = 0; i < 8; i++) {
             addOneBox(2 * i + 2, 2 * i + 5);
         }
+        var sprite = new egret.Sprite();
+        sprite.graphics.beginFill(0xff0000);
+        sprite.graphics.drawRect(0, 0, 100, 100);
+        sprite.graphics.endFill();
+        sprite.x = 100;
+        sprite.y = this.stage.$stageHeight - 100;
+        this.addChild(sprite);
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。

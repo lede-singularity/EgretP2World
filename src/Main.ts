@@ -59,7 +59,6 @@ class Main extends eui.UILayer {
             theme.addEventListener(eui.UIEvent.COMPLETE, () => {
                 resolve();
             }, this);
-
         })
     }
 
@@ -99,9 +98,12 @@ class Main extends eui.UILayer {
         var world: p2.World = new p2.World();
         world.sleepMode = p2.World.BODY_SLEEPING;
 
+        console.info("this.stage.$stageHeight", this.stage.$stageHeight);
+        console.info("this.stage.$stageWidth", this.stage.$stageWidth);
+
         //创建plane
         var planeShape: p2.Plane = new p2.Plane();
-        var planeBody: p2.Body = new p2.Body({ position: [0, -15] });
+        var planeBody: p2.Body = new p2.Body({ position: [0, -(this.stage.$stageHeight - 100) / 50] });
         planeBody.addShape(planeShape);
         planeBody.displays = [];
         world.addBody(planeBody);
@@ -110,7 +112,7 @@ class Main extends eui.UILayer {
 
         function onTouch(e: egret.TouchEvent): void {
             var positionX: number = Math.floor(e.stageX / factor);
-            var positionY: number = Math.floor((e.stageY) / factor);
+            var positionY: number = -Math.floor((e.stageY) / factor);
             console.log("onTouch", positionX, positionY);
             addOneBox(positionX, positionY);
         }
@@ -150,6 +152,14 @@ class Main extends eui.UILayer {
         for (var i = 0; i < 8; i++) {
             addOneBox(2 * i + 2, 2 * i + 5);
         }
+
+        var sprite:egret.Sprite = new egret.Sprite();
+        sprite.graphics.beginFill(0xff0000);
+        sprite.graphics.drawRect(0, 0, 100, 100);
+        sprite.graphics.endFill();
+        sprite.x = 100;
+        sprite.y = this.stage.$stageHeight - 100;
+        this.addChild(sprite);
     }
 
     /**
